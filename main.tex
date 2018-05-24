@@ -36,21 +36,81 @@
 
 
 \begin{abstract}
-A modern synchrotron beamline requires an important simulation work for its design and optimization using software modelling tools. OASYS (OrAnge SYnchrotron Suite) is an open-source Graphical Environment for optic simulation software used in synchrotron facilities.
+A modern synchrotron beamline requires an important simulation work for its design and optimization using software modelling tools. OASYS (OrAnge SYnchrotron Suite) is an open-source graphical environment for beamline simulation software used in synchrotron facilities.
 
-The OASYS environment provides not only an intuitive and very-easy-to-use graphical interface, but also high flexibility and rapidity for interactive simulations. It allows to quickly compare multiple beamline configurations in the same workspace. 
+The OASYS environment provides not only an intuitive and very-easy-to-use graphical interface, but also high flexibility and rapidity for interactive simulations. It allows to quickly define and compare multiple configurations in the same workspace to permit optimizing an X-ray instrument. 
 
-OASYS integrates in a synergetic way the most powerful calculation engines available. It interfaces widely used simulation tools for X-ray Optics (e.g. SHADOW for ray tracing, and SRW for wave optics completed with new complementary tools. OASYS provides a language to communicate among the different packages by sending and receiving encapsulated data. Python has been chosen as main programming language, because of its universality and popularity in scientific computing. The software Orange, developed at the University of Ljubljana, has been chosen as high level workflow engine that provides the interaction with the user and communication mechanisms. The OASYS platform permits integration of different packages for a complete modelling of a synchrotron virtual experiment, starting from the parameters of the electron beam, calculation of the radiation from magnetic structure, the photon beam transport and optimization by X-ray optics and eventually interaction with sample to obtain instrumental function or study analyzers and detectors. 
+OASYS integrates in a synergetic way the most powerful open-source calculation engines available. It interfaces widely used simulation tools for X-ray Optics (e.g. SHADOW for ray tracing, and SRW for wave optics) that are completed with new tools. OASYS provides a mechanism to communicate among the different packages by sending and receiving encapsulated data. The final goal of the OASYS platform is the integration of different packages to completely model synchrotron virtual experiment, retrieving the parameters of the electron beam, calculating the radiation from magnetic structure, then transporting and optimizing the photon beam and eventually including models for interaction with materials to get instrumental functions, study analyzers and detectors and perform ab-initio simulations to support experimental data analysis. 
+
+% Python has been chosen as main programming language, because of its universality and popularity in scientific computing. The software Orange, developed at the University of Ljubljana, has been chosen as high level workflow engine that provides the interaction with the user and communication mechanisms.
+
 \end{abstract}
 
-% Head 1
-\section{INTRODUCTION: OASYS GOAL}
 
-\section{OASYS MECHANISM (CANVAS AND ADD-ONS)}
-OASYS (ORange SYnchrotron Suite) \cite{mandel_wolf}  is a new graphical environment for modelling X-ray experiments. The combination of a modern  software architecture with powerful and highly intuitive graphical interface provides high flexibility and rapidity for interactive simulations. Oasys presents an environment for synchrotron radiation virtual experiments. It is presented as a graphical environment (canvas) that can be populate with applications (widgets) which communicate among them. The applications come from different simulation packages interfaced into Oasys and called add-ons. The different add-ons are optional packages that can be installed or deinstalled depending on user's convinience. Many add-ons are supplied, and some others are under development. The interesting concept is that the users can add new add-ons depending on their needs. Experimental configuration can be copied, duplicated and changed very quickly to compare multiple configurations. At the Its purpose is to integrate in a synergetic way the most powerful calculation engines available. OASYS integrates different simulation strategies via the implementation of adequate simulation tools for X-ray Optics (e.g. ray tracing and wave optics packages). 
+% Head 1
+\section{THE PHILOSOPHY OF A VIRTUAL EXPERIMENT: OASYS GOAL}
+
+OASYS (ORange SYnchrotron Suite) is a new graphical environment for modelling X-ray experiments. The goal of the OASYS platform is to make available to the user a collection of different packages to model a synchrotron virtual experiment. From the scientific and algorithmic point of view, OASYS rely on existing well know codes and libraries that are available  thanks to the open-source community. We rely on the open-source mechanism which permits the use of valuable tools developed in synchrotron facilities and made available to the community, and at the same time guarantees due credit to the authors and supporting institutions. Although it is possible to use these codes independently, the users generally get stacked because of installation problems, definition of input parameters, decoding output files and perform data visualization. OASYS integrates in a synergetic way these computational units in a modern and performant graphical environment that facilitates all these tasks, and more important introduces the concept of interoperability or, in other words, the ability of the different units to communicate and exchange information among them. 
+
+OASYS aims to simulating the complete chain of a synchrotron experiment, from the beginning to the end. Thus, the vistual experiment can be decoupled in different steps (see Figure~\ref{figChain0}: 
+\begin{enumerate}
+ \item Electron beam description and propagation
+ \item Photon source: the creation of a photon beam using magnetic structures (insertion devices, bending magnets) placed in the electron beam 
+ \item Beamline optics: the description and effect of the individual optical elements or components (slits, mirror, crystals, gratings, etc.)
+ \item The interaction with the photon beam with a sample: The detection and analysis of the scattered radiation to get information on the instrumental function (using ideal samples) or on the sample itself via comparison with experimental data. 
+\end{enumerate}
+
+
+\begin{figure}[h]
+\includegraphics[width=14cm]{FIGURES/chain0.png}
+\caption{Schematic workflow of a synchrotron experiment where simulations cover the electron beam, the photon source, the beamline and finally the interaction of the photon beam with the samples.}
+\label{figChain0}
+\end{figure}
+
+We are conscient of the complexity, dimension and difficulty of such complete simulation in particular if one thinks on the large variety of beamlines and experimental techniques in use. At present, the power of OASYS resides in presenting a modular environment to allow simulations along the complete chain. OASYS now includes powerful tools to make simulations of points 2 (photon sources) and 3 (beamline optics). The ability to be extended to cover the electron beam characteristics and also the interaction with samples is also present and some results are obtained. 
+
+%===============================
+
+
+% , retrieving the parameters of the electron beam, calculating the radiation from magnetic structure, then transporting and optimizing the photon beam and eventually including models for interaction with materials to get instrumental functions, study analyzers and detectors and perform ab-initio simulations to support experimental data analysis. 
+% 
+% Electron Beam, Photon Source, Beamline, Sample interaction, Data modeling and analyses. 
+% 
+% Most X-ray techniques are based on a signal determined by the convolution of physical effects introduced by the sample with the characteristics of the photon beam mainly due to the source and beamline optics. The latter is the so-called Instrumental Profile Function (Cheary et al., 2004￼; Zuev, 2006￼).
+% 
+% The ray-tracing approach can be used to ab initio calculate the instrumental function of a synchrotron radiation beamline. This has been successfully tested with an X-ray powder diffraction (XRPD) beamline (Rebuffi and Scardi, 2014￼) used for line profile analysis, where complete control of the diffracted signal is necessary (Scardi et al., 2010￼). The synchrotron beam shape, divergence and energy distributions that result from the source characteristics and beamline optics contribute to broaden the diffraction peaks of the recorded diffractograms. The peak width dependence versus the 2θ angle (Caglioti et al., 1958￼; Sabine, 1987￼) is usually parameterized by Caglioti's equation (Scardi et al., 1994￼), where the full width at half-maximum (FWHM) of the instrumental peak profiles represented as pseudo-Voigt curves has the form FWHM(θ) = [W + Vtanθ + Utan2θ]1/2, where W, V and U are Caglioti's parameters and θ is the diffraction angle.
+% 
+% A special widget representing XRPD samples (see Fig. 7￼) in a capillary holder simulates the diffracted photon beam created by the interaction of the photon beam generated by SHADOW with a capillary filled by a crystalline material. The simulation takes into account not only the diffraction law but also the absorption of the photons by the sample material and the sample holder (that can be a source of considerable aberrations). Then, diffracted rays are traced onto the detector and other possible optical elements. The widget computes Caglioti's parameters fitting a pseudo-Voigt at every simulated diffraction peak.
+
+
+\section{OASYS MECHANISM (CANVAS, WIDGETS AND ADD-ONS). KEY TECHNOLOGIES.}
+
+A main feature of OASYS is to deliver a highly intuitive graphical interface provides high flexibility and rapidity for interactive simulations. Oasys presents an environment for synchrotron radiation virtual experiments. It is presented as a graphical environment (canvas) that can be populate with applications (widgets) which communicate among them. The applications come from different simulation packages interfaced into Oasys and called add-ons. The different add-ons are optional packages that can be installed or deinstalled depending on user's convinience. The interesting concept is that the users can add new add-ons depending on their needs. The canvas is populated with widgets that the user selects from the add-ons menus. The widgets are connected via ``wires'' that are channels for exchanging information. The kind of information is ``labelled'' in such a way that two widgets can be physically connected if one is capable to emit and the other is able to receive signals that are compatible, i.e., with the same label. In this way the user builds the simulation in a form of workflow containing widgets linked by wires. Every widget has a multiple functionality: it holds the input parameters, triggers a calculation or a data flow and displays results. All these functionality is embedded in a single window that opens by double-clicking the widget. Figure~\ref{figCanvas} presents an example of the canvas and a window from a widget. 
+The flowchart concept of the application naturally permits to chain the elements of a virtual experiment. Configurations represented by a single or multiple widgets can be copied, duplicated and changed very quickly to compare multiple configurations. OASYS integrates in a synergetic way the most powerful calculation engines available, that are summarized in the next section. 
+
+\begin{figure}[h]
+\includegraphics[width=14cm]{FIGURES/canvas.png}
+\caption{OASYS application showing on the left area the menu zone containing the installed add-ons, the canvas with some widgets and connections, and a window with the parameters and results of the ``Undulator radiation'' application which computes the flux of an undulators as a function of the horizontal and vertical coordinates and photon energy.}
+\label{figCanvas}
+\end{figure}
 
 In the initial phase of OASYS development, we first focused our attention on importing python-based APIs into its environment, but recently we dedicated our efforts on its final goal: to define a uniform and exchangeable description of the real world set up that is tailored to the synchrotron world and is still flexible enough to allow particularities for different algorithms and physical approaches. This is implemented by creating an object-oriented framework library, providing the glossary for the definition of light sources and optical components, together with a set of dedicated (so-called) widgets, the active elements of the OASYS graphical user interface (GUI) [11]. This common layer upon OASYS APIs has been called SYNED (SYNchrotron Elements Dictionary), and it is the base for allowing user to create workspaces with several APIs simulating the same beamline without data misalignment or redundancy, thus separating the description of the real world from details of the calculation algorithms and allowing users to easily benchmark their calculations by using different products for the same simulation.
+
+OASYS goal is to become an integration platform where different software packages can communicate by sharing information and results, allowing the user to perform multi-application, complex analysis and simulations easily and safely. To achieve this goal, a careful planning on the technologies and right selections of the tools is necessary. The boundary conditions we imposed is to be open-source, work with open-source tools and be compatible with applications, libraries and packages developed in the academic context. For this reason Python has been selected as main language. It lives a very wide ecosystem with plenty of tools developed by a huge community. 
+
+%================================
+
+
+
+
 After implementing these common definitions and data structures, we work on the creation of a software platform able to combine different APIs, by exchanging data and calculation results. The final purpose is to optimize running different calculations and making comparisons of the results. The first integration framework library we developed is dedicated to wave optics and it is called WOFRY (Wave Optics FRamework in pYthon), a generalization (or abstraction) of a wavefront propagation software tool, combined with the SYNED definition of a synchrotron radiation beamline.
+
+
+
+
+
+
+
 
 Existing OASYS API like ShadowOui [11] and the wavefront propagation tool WISE [12] and XOPPY (XOP [13] in PYthon) has been refactored to be compatible with SYNED. The SRW OASYS prototype API has been implemented according to both WOFRY and SYNED frameworks. UML [14] class diagrams, implementation details and examples of both framework are shown in the following paragraphs.
 
@@ -58,32 +118,20 @@ The ultimate purpose of OASYS is to integrate in a synergetic way the most power
 
 OASYS is a modern and user-friendly graphical environment for modelling X-ray experiments, where several top-level optical simulation tools have already been successfully integrated. We showed by examples how the OASYS environment allows the users to perform complex calculations in an intuitive and easy way, increasing the level of affordability of the optical design. OASYS and the available APIs (Add-Ons) is continuously developed since 2013 and upgraded both in term of number of functionalities and in robustness.
 
-OASYS ultimate goal is to provide not only a mere container of APIs, but to become an integration platform where different APIs can communicate by sharing information and results, allowing the user to perform multi-application, complex analysis and simulations easily and safely.
-
-\section{THE PHILOSOPHY OF A VIRTUAL EXPERIMENT}
-
-Electron Beam, Photon Source, Beamline, Sample interaction, Data modeling and analyses. 
-
-Most X-ray techniques are based on a signal determined by the convolution of physical effects introduced by the sample with the characteristics of the photon beam mainly due to the source and beamline optics. The latter is the so-called Instrumental Profile Function (Cheary et al., 2004￼; Zuev, 2006￼).
-
-The ray-tracing approach can be used to ab initio calculate the instrumental function of a synchrotron radiation beamline. This has been successfully tested with an X-ray powder diffraction (XRPD) beamline (Rebuffi and Scardi, 2014￼) used for line profile analysis, where complete control of the diffracted signal is necessary (Scardi et al., 2010￼). The synchrotron beam shape, divergence and energy distributions that result from the source characteristics and beamline optics contribute to broaden the diffraction peaks of the recorded diffractograms. The peak width dependence versus the 2θ angle (Caglioti et al., 1958￼; Sabine, 1987￼) is usually parameterized by Caglioti's equation (Scardi et al., 1994￼), where the full width at half-maximum (FWHM) of the instrumental peak profiles represented as pseudo-Voigt curves has the form FWHM(θ) = [W + Vtanθ + Utan2θ]1/2, where W, V and U are Caglioti's parameters and θ is the diffraction angle.
-
-A special widget representing XRPD samples (see Fig. 7￼) in a capillary holder simulates the diffracted photon beam created by the interaction of the photon beam generated by SHADOW with a capillary filled by a crystalline material. The simulation takes into account not only the diffraction law but also the absorption of the photons by the sample material and the sample holder (that can be a source of considerable aberrations). Then, diffracted rays are traced onto the detector and other possible optical elements. The widget computes Caglioti's parameters fitting a pseudo-Voigt at every simulated diffraction peak.
 
 
-\section{KEY TECHNOLOGIES}
 
 OASYS is fully based on the software Orange [2], developed at the University of Ljubljana (Slovenia), which is the high level workflow engine that provides the interaction with the user and communication mechanisms. Orange is a Python-based, comprehensive, component-based framework for data mining and machine learning users and developers. Orange is designed to simplify the assembly of data analysis workflows and crafting of data mining approaches from a combination of existing components. 
 
-OASYS is written in Python 3.4 and relies on PyQt 5.8.2 [3] for the GUI appearance. Complementing the Orange workflow infrastructure, OASYS graphs and plots are based on the library silx [4]. X-ray-matter interaction cross sections and scattering functions are obtained from xraylib [5], used for most optical calculations.
-
-The JSON integration as exchange format.
-
-Remote access (SYNED-JSON, DABAM, X-RAY-SERVER)
-
-PHYSICS: xraylib, scipy [codata] 
-
-GRAPHICS: silx
+% OASYS is written in Python 3.4 and relies on PyQt 5.8.2 [3] for the GUI appearance. Complementing the Orange workflow infrastructure, OASYS graphs and plots are based on the library silx [4]. X-ray-matter interaction cross sections and scattering functions are obtained from xraylib [5], used for most optical calculations.
+% 
+% The JSON integration as exchange format.
+% 
+% Remote access (SYNED-JSON, DABAM, X-RAY-SERVER)
+% 
+% PHYSICS: xraylib, scipy [codata] 
+% 
+% GRAPHICS: silx
 
 
 \begin{figure}[h]
@@ -95,12 +143,11 @@ GRAPHICS: silx
 
 \section{THE OPTICS TOOLS}
 
-\subsection{The XOPPY Toolbox}
+OASYS integrates different simulation strategies via the implementation of adequate simulation tools for X-ray Optics (e.g. ray tracing and wave optics packages). 
 
-\subsection{The Metrology Toolbox (DABAM)}
-An open-source database containing metrology data for X-ray mirrors is presented. It makes available metrology data (mirror heights and slopes profiles) that can be used with simulation tools for calculating the effects of optical surface errors in the performances of an optical instrument, such as a synchrotron beamline. A typical case is the degradation of the intensity profile at the focal position in a beamline due to mirror surface errors. This database for metrology (DABAM) aims to provide to the users of simulation tools the data of real mirrors. The data included in the database are described in this paper, with details of how the mirror parameters are stored. An accompanying software is provided to allow simple access and processing of these data, calculate the most usual statistical parameters, and also include the option of creating input files for most used simulation codes. Some optics simulations are presented and discussed to illustrate the real use of the profiles from the database.
+\subsection{The toolboxes}
 
-\subsection{Optics for incoherent optics (ray-tracing)}
+\subsection{Optics for incoherent optics. Ray-tracing and its environment.}
 
 The first step before the construction of any X-ray system, such as a synchrotron beamline, is an
 accurate conceptual design of the optics. The beam should be transported to a given image plane
@@ -121,14 +168,16 @@ certainly be developed in the near future. This paper describes the recent devel
 mainly in connection with the SHADOW [2] code. At the end of the paper, some ideas of integration
 of ray tracing and wave optics are discussed, and some collaborative effort is on progress. 
 
-
 A hybrid method combining ray-tracing and wavefront propagation was recently developed for X-ray optics simulation and beamline design optimization. One major application of the hybrid method is its ability to assess the effects of figure errors on the performance of focusing mirrors. In the present work, focusing profiles of mirrors with different figure errors are simulated using three available wave optics methods: the hybrid code based on the Fourier optics approach, the stationary phase approximation and a technique based on the direct Fresnel-Kirchhoff diffraction integral. The advantages and limitations of each wave optics method are discussed. We also present simulations performed using the figure errors of an elliptical cylinder mirror measured at APS using microstitching interferometry. These results show that the hybrid method provides accurate and quick evaluation of the expected mirror performance making it a useful tool for designing diffraction-limited focusing beamlines.
 
+An open-source database containing metrology data for X-ray mirrors is presented. It makes available metrology data (mirror heights and slopes profiles) that can be used with simulation tools for calculating the effects of optical surface errors in the performances of an optical instrument, such as a synchrotron beamline. A typical case is the degradation of the intensity profile at the focal position in a beamline due to mirror surface errors. This database for metrology (DABAM) aims to provide to the users of simulation tools the data of real mirrors. The data included in the database are described in this paper, with details of how the mirror parameters are stored. An accompanying software is provided to allow simple access and processing of these data, calculate the most usual statistical parameters, and also include the option of creating input files for most used simulation codes. Some optics simulations are presented and discussed to illustrate the real use of the profiles from the database.
 
-\subsection{Optics for coherent optics (wavefronts)}
 
-\subsection{Simulations for partial coherence optics}
+\subsection{Optics for coherent optics. Wavefront propagation.}
 
+\subsection{Towards simulations for partial coherence optics}
+
+\section{OASYS availability, customization, extensibility}
 
 % \section{FIRST-ORDER HEADING}
 % This is an example of dummy text. This is an example of dummy text. This is an example of dummy text.
