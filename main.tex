@@ -94,14 +94,45 @@ The flowchart concept of the application naturally permits to chain the elements
 \label{figCanvas}
 \end{figure}
 
-In the initial phase of OASYS development, we first focused our attention on importing python-based APIs into its environment, but recently we dedicated our efforts on its final goal: to define a uniform and exchangeable description of the real world set up that is tailored to the synchrotron world and is still flexible enough to allow particularities for different algorithms and physical approaches. This is implemented by creating an object-oriented framework library, providing the glossary for the definition of light sources and optical components, together with a set of dedicated (so-called) widgets, the active elements of the OASYS graphical user interface (GUI) [11]. This common layer upon OASYS APIs has been called SYNED (SYNchrotron Elements Dictionary), and it is the base for allowing user to create workspaces with several APIs simulating the same beamline without data misalignment or redundancy, thus separating the description of the real world from details of the calculation algorithms and allowing users to easily benchmark their calculations by using different products for the same simulation.
 
-OASYS goal is to become an integration platform where different software packages can communicate by sharing information and results, allowing the user to perform multi-application, complex analysis and simulations easily and safely. To achieve this goal, a careful planning on the technologies and right selections of the tools is necessary. The boundary conditions we imposed is to be open-source, work with open-source tools and be compatible with applications, libraries and packages developed in the academic context. For this reason Python has been selected as main language. It lives a very wide ecosystem with plenty of tools developed by a huge community. 
-
+OASYS goal is to become an integration platform where different software packages can communicate by sharing information and results, allowing the user to perform multi-application, complex analysis and simulations easily and safely. To achieve this goal, a careful planning of the technologies to be used and a right selections of the software tools is necessary. The boundary conditions we imposed is to be open-source, work with open-source tools and be compatible with applications, libraries and packages developed in the academic context. For this reason Python has been selected as main language. It lives a very wide ecosystem with plenty of tools developed by a huge community. 
+The OASYS higher level workflow engine that is presented to the user is fully based on the software Orange REFERENCE, developed at the University of Ljubljana (Slovenia). Orange is a Python-based, comprehensive, component-based framework especially designed for data mining and machine learning applications. Orange is designed to simplify the assembly of data analysis workflows and crafting of data mining approaches from a combination of existing components. The Orange suite lumps together several data mining oriented services and applications into a workflow-based interface that provides the interaction with the user, the communication mechanism among the different units. The OASYS higher lever interface derived from the Orange application naked  from its main application tools menus and widgets. OASYS reuses the native Orange main window, canvas, and workflow infrastructure and prompts it to receive the packages we developed for the synchrotron virtual experiments. In addition to Orange workflows, OASYS includes the software elements that are used by several applications (like exchangeable data) and installs some common dependencies used by all or several packages (add-ons). Orange widgets are based in Qt, thus all user-interface code implements Qt functionality. In OASYS all  high level graphics are implemented using the library silx REFERENCE developed at ESRF. It contains the necessary applications for displaying 1D, 2D and 3D data and interactive tools for high-level visualization. Coming into more specific scientific applications, most synchrotron simulation codes need to access data for simulating matter-x-ray interactions. The material database for photon-matter cross sections used in OASYS is xraylib REFERENCE. xraylib provides access to some of the most cited databases of physical data in the field of X-rays. It is used to compute refraction indices, attenuation coefficients, cross sections, crystal structure factors, etc.  OASYS also has scipy as a dependency, as it is commonly used for many scientific calculus, fitting, special functions, etc. In particular, the fundamental physical constants should not be directly coded into the applications, as some of them must be updated from time to time following the recommended values the Committee on Data of the International Council for Science (CODATA). OASYS uses the values available in scipy.constants.
 %================================
 
 
 
+
+
+
+
+
+
+
+\begin{figure}[h]
+\includegraphics[width=14cm]{FIGURES/chain.png}
+\caption{Effect of grazing angle (20, 25, 30 and 40 mrad, from top row to botom row) for systems using paraboloid mirrors. The source horizontal divergence is $\Upsilon_h$=10 mrad}
+\label{figGrazing}
+\end{figure}
+
+
+\section{THE OPTICS TOOLS}
+
+% OASYS is written in Python 3.4 and relies on PyQt 5.8.2 [3] for the GUI appearance. Complementing the Orange workflow infrastructure, OASYS graphs and plots are based on the library silx [4]. X-ray-matter interaction cross sections and scattering functions are obtained from xraylib [5], used for most optical calculations.
+% 
+% The JSON integration as exchange format.
+% 
+% Remote access (SYNED-JSON, DABAM, X-RAY-SERVER)
+% 
+% PHYSICS: xraylib, scipy [codata] 
+% 
+% GRAPHICS: silx
+
+OASYS integrates different simulation strategies via the implementation of adequate simulation tools for X-ray Optics (e.g. ray tracing and wave optics packages). 
+
+
+
+
+In the initial phase of OASYS development, we first focused our attention on importing python-based APIs into its environment, but recently we dedicated our efforts on its final goal: to define a uniform and exchangeable description of the real world set up that is tailored to the synchrotron world and is still flexible enough to allow particularities for different algorithms and physical approaches. This is implemented by creating an object-oriented framework library, providing the glossary for the definition of light sources and optical components, together with a set of dedicated (so-called) widgets, the active elements of the OASYS graphical user interface (GUI) [11]. This common layer upon OASYS APIs has been called SYNED (SYNchrotron Elements Dictionary), and it is the base for allowing user to create workspaces with several APIs simulating the same beamline without data misalignment or redundancy, thus separating the description of the real world from details of the calculation algorithms and allowing users to easily benchmark their calculations by using different products for the same simulation.
 
 After implementing these common definitions and data structures, we work on the creation of a software platform able to combine different APIs, by exchanging data and calculation results. The final purpose is to optimize running different calculations and making comparisons of the results. The first integration framework library we developed is dedicated to wave optics and it is called WOFRY (Wave Optics FRamework in pYthon), a generalization (or abstraction) of a wavefront propagation software tool, combined with the SYNED definition of a synchrotron radiation beamline.
 
@@ -117,33 +148,6 @@ Existing OASYS API like ShadowOui [11] and the wavefront propagation tool WISE [
 The ultimate purpose of OASYS is to integrate in a synergetic way the most powerful calculation engines available to perform virtual experiments in a synchrotron beamline, from the electron emission to the sample scattering. For X-ray Optics, OASYS integrates different simulation strategies via the implementation of adequate simulation tools (e.g. ray tracing and wave optics packages). It provides a language to make them to communicate by sending and receiving encapsulated data.
 
 OASYS is a modern and user-friendly graphical environment for modelling X-ray experiments, where several top-level optical simulation tools have already been successfully integrated. We showed by examples how the OASYS environment allows the users to perform complex calculations in an intuitive and easy way, increasing the level of affordability of the optical design. OASYS and the available APIs (Add-Ons) is continuously developed since 2013 and upgraded both in term of number of functionalities and in robustness.
-
-
-
-
-OASYS is fully based on the software Orange [2], developed at the University of Ljubljana (Slovenia), which is the high level workflow engine that provides the interaction with the user and communication mechanisms. Orange is a Python-based, comprehensive, component-based framework for data mining and machine learning users and developers. Orange is designed to simplify the assembly of data analysis workflows and crafting of data mining approaches from a combination of existing components. 
-
-% OASYS is written in Python 3.4 and relies on PyQt 5.8.2 [3] for the GUI appearance. Complementing the Orange workflow infrastructure, OASYS graphs and plots are based on the library silx [4]. X-ray-matter interaction cross sections and scattering functions are obtained from xraylib [5], used for most optical calculations.
-% 
-% The JSON integration as exchange format.
-% 
-% Remote access (SYNED-JSON, DABAM, X-RAY-SERVER)
-% 
-% PHYSICS: xraylib, scipy [codata] 
-% 
-% GRAPHICS: silx
-
-
-\begin{figure}[h]
-\includegraphics[width=14cm]{FIGURES/chain.png}
-\caption{Effect of grazing angle (20, 25, 30 and 40 mrad, from top row to botom row) for systems using paraboloid mirrors. The source horizontal divergence is $\Upsilon_h$=10 mrad}
-\label{figGrazing}
-\end{figure}
-
-
-\section{THE OPTICS TOOLS}
-
-OASYS integrates different simulation strategies via the implementation of adequate simulation tools for X-ray Optics (e.g. ray tracing and wave optics packages). 
 
 \subsection{The toolboxes}
 
