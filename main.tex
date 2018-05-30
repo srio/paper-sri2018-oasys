@@ -100,8 +100,30 @@ XOPPY lumps together several codes to simulate X-ray sources. They calculate syn
 
 Other add-ons incorporate additional functionality for OASYS. In particular for crystals: the add-on XRAYSERVER implements a front-end of Sergey Stepanov routines available in its widely used web server REFERENCE.  
 
+\begin{figure}[hh]
+\includegraphics[width=7cm]{FIGURES/xoppy}
+\caption{XOPPY.}
+\label{figXoppy}
+\end{figure}
 
 \subsection{Optics for incoherent optics. Ray-tracing and its environment.}
+
+The ray-tracing technique has been for decades the choice for simulating synchrotron beamlines. Most of the effects that are limiting the performances of X-ray optical elements like source emittance, aberrations, errors in the optical surfaces, etc. can be efficiently modelled by ray tracing. Some particularities of the X-ray optics as compared with visible optics makes impossible that standard commercial optics tools not adequate to synchrotron radiation simulations because, for example, they lack of  a database for refraction indices in the X-ray domain, cannot handle very grazing incident optics and lack of models for perfect crystal diffraction. The code {\\tt shadow3} REFERENCE is available in OASYS and via the {\tt ShadowOUI} add-on. This new interface for shadow3 makes a quantum gap in user-friendliness from the old interface in XOP making it more intuitive and incorporating also widgets that permit to define in a very easy way compound optical systems, like CRLs or transfocators. Moreover, ShadowOUI also contains two major new contributions that are introduced here: the Hybrid model and DABAM.
+
+The hybrid method REFERENCE combines ray-tracing and wavefront propagation. One major application of the hybrid method is its ability to assess the effects of figure errors on the performance of focusing mirrors. The hybrid method provides accurate and quick evaluation of the expected mirror performance making it a useful tool for designing diffraction-limited focusing beamlines.
+
+An open-source DAtaBAse for Metrology (DABAM) containing measured profiles of a large collection of X-ray mirrors has been created and interfaced in OASYS. It makes available metrology data (mirror heights and slopes profiles) that can be used with simulation tools for calculating the effects of optical surface errors in the performances of a synchrotron beamline. A typical case is the degradation of the intensity profile at the focal position in a beamline due to mirror surface errors. This database  aims to provide to the users of simulation tools the data of real mirrors.
+
+
+
+
+
+\subsection{Optics for coherent optics. Wavefront propagation.}
+
+\subsection{Towards simulations for partial coherence optics}
+
+\section{OASYS availability, customization, extensibility}
+
 
 %===============================
 
@@ -150,10 +172,6 @@ The ultimate purpose of OASYS is to integrate in a synergetic way the most power
 
 OASYS is a modern and user-friendly graphical environment for modelling X-ray experiments, where several top-level optical simulation tools have already been successfully integrated. We showed by examples how the OASYS environment allows the users to perform complex calculations in an intuitive and easy way, increasing the level of affordability of the optical design. OASYS and the available APIs (Add-Ons) is continuously developed since 2013 and upgraded both in term of number of functionalities and in robustness.
 
-Some optical effects are better described by a geometrical model
-(sometimes extended by associating electric fields to each ray) like aberrations, errors in the optical
-surfaces, beam dimensions, role of critical angle in beam intensity, etc., whereas others, like
-interference and diffraction, are better explained using a wave model. 
 
 Wave optics methods are
 computationally more expensive, as usually one has to finely grid the phase space. Hybrid methods
@@ -164,16 +182,7 @@ certainly be developed in the near future. This paper describes the recent devel
 mainly in connection with the SHADOW [2] code. At the end of the paper, some ideas of integration
 of ray tracing and wave optics are discussed, and some collaborative effort is on progress. 
 
-A hybrid method combining ray-tracing and wavefront propagation was recently developed for X-ray optics simulation and beamline design optimization. One major application of the hybrid method is its ability to assess the effects of figure errors on the performance of focusing mirrors. In the present work, focusing profiles of mirrors with different figure errors are simulated using three available wave optics methods: the hybrid code based on the Fourier optics approach, the stationary phase approximation and a technique based on the direct Fresnel-Kirchhoff diffraction integral. The advantages and limitations of each wave optics method are discussed. We also present simulations performed using the figure errors of an elliptical cylinder mirror measured at APS using microstitching interferometry. These results show that the hybrid method provides accurate and quick evaluation of the expected mirror performance making it a useful tool for designing diffraction-limited focusing beamlines.
 
-An open-source database containing metrology data for X-ray mirrors is presented. It makes available metrology data (mirror heights and slopes profiles) that can be used with simulation tools for calculating the effects of optical surface errors in the performances of an optical instrument, such as a synchrotron beamline. A typical case is the degradation of the intensity profile at the focal position in a beamline due to mirror surface errors. This database for metrology (DABAM) aims to provide to the users of simulation tools the data of real mirrors. The data included in the database are described in this paper, with details of how the mirror parameters are stored. An accompanying software is provided to allow simple access and processing of these data, calculate the most usual statistical parameters, and also include the option of creating input files for most used simulation codes. Some optics simulations are presented and discussed to illustrate the real use of the profiles from the database.
-
-
-\subsection{Optics for coherent optics. Wavefront propagation.}
-
-\subsection{Towards simulations for partial coherence optics}
-
-\section{OASYS availability, customization, extensibility}
 
 % \section{FIRST-ORDER HEADING}
 % This is an example of dummy text. This is an example of dummy text. This is an example of dummy text.
