@@ -36,7 +36,7 @@
 
 
 \begin{abstract}
-A modern synchrotron beamline requires an important simulation work for its design and optimization using software modelling tools. OASYS (OrAnge SYnchrotron Suite) is an open-source graphical environment for beamline simulation software used in synchrotron facilities.
+A modern synchrotron beamline requires an important simulation effort for its design and optimization. OASYS (OrAnge SYnchrotron Suite) is an open-source graphical environment for beamline simulation software designed for that purpose, to perform virtual synchrotron experiments in an efficient, elegant and precise way.
 
 The OASYS environment provides not only an intuitive and very-easy-to-use graphical interface, but also high flexibility and rapidity for interactive simulations. It allows to quickly define and compare multiple configurations in the same workspace to permit optimizing an X-ray instrument. 
 
@@ -92,13 +92,16 @@ The first step before the construction of any X-ray system, such as a synchrotro
 Today, optical design relies more and more on computer simulation and optimization. 
 OASYS integrates different simulation strategies via the implementation of advanced simulation tools for X-ray Optics. We can classify these applications into three groups: i) toolboxes, or applications used for calculating characteristics of sources like spectra or optical elements such as material data, reflectivities, refraction indices, etc. and then simulation of the complete beam using either a ii) ray tracing approach based on geometrical optics valid for mostly incoherent X-ray beams and iii) wavefront propagation useful for beamlines where coherent effects are important and implementing physical optics methods.  
 
-\subsection{The toolboxes (XOPPY and X-ray server)}
+\subsection{The toolboxes (XOPPY, X-ray server, SYNED)}
 
 The ultimate beamline modelling perform a complete simulation including every component of the beamline. For that it is necessary to define every single parameter of the source,  select the appropriated insertion device, define all optical elements including dimensions and positions, etc. In other words, a quite precise beamline description is needed. However, in a first stage of the design, the scientist of engineer would like to check different possibilities of undulators, mirror coatings, monochromator crystal reflection, etc. For that OASYS makes availability different small programs to calculate the individual response of each optical element and characteristics of a particular source, like emitted flux and power. This concept of toolbox has been imported from the code XOP REFERENCE developed in the past which became very popular in many synchrotron facilities. Indeed, all applications of XOP have been ported to python for being integrated into XOPPY, the python version of XOP and available as an OASYS add-on.  
 
 XOPPY lumps together several codes to simulate X-ray sources. They calculate synchrotron radiation sources (spectral emission, angular and spatial distributions, etc.) for undulators, wigglers and bending magnets. For undulators, {\tt Undulator Spectrum} computes the spectral characteristics (emission versus photon energy),  {\tt Undulator Power Density} calculates the emission versus spatial coordinates (x,y) in a screen. In {\tt Undulator Radiation} the radiation is calculated versus three independent variables (x,y, photon energy). The {\tt TC} and {\tt TC-SLIT} calculate tuning curves (emission versus gap variation). These applications interface well known undulator codes ({\tt US, URGENT, SRW, pySRU}). Other applications calculate emission for wigglers ({\tt WIGGLER, WS}), Bending Magnets ({\tt BM}) and X-ray tubes ({\tt TUBE\_W, TUBES}). The {\tt POWER} application can be attached to the source spectrum to calculate the transmission and absorption of some elements (mirrors and filters). These applications are often used to calculate the power deposited and the absorption of the elements, a require input for further finite element analysis to compute thermo-mechanical deformation of the elements. The results of these calculations in terms of surface deformation can be re-injected in OASYS for studying the degradation of the beam, using ray tracing or wave optics simulations. Other applications for reflectivity of optical elements (mirrors, crystals, multilayers) complete the XOPPY package. 
 
 Other add-ons incorporate additional functionality for OASYS. In particular for crystals: the add-on XRAYSERVER implements a front-end of Sergey Stepanov routines available in its widely used web server REFERENCE.  
+
+The availability of different simulation codes in the OASYS environment may need to a redundancy in how the user enters the parameters. For example, the parameters of a mirror (position in the beamline, dimensions curvature, coating, etc.) have to be entered independently in the different codes. 
+OASYS defines a uniform and exchangeable description of the real set up (the components of the virtual experiment) tailored to the synchrotron world  flexible enough to allow particularities for different algorithms and physical approaches. This is implemented by creating a framework library that provids the glossary for the definition of light sources and optical components, together with a set of dedicated widgets. This common layer upon OASYS has been called SYNED (SYNchrotron Elements Dictionary), and it is the base for allowing user to create workspaces with several add-ons simulating the same beamline without redundancy, thus separating the description of the real world from details of the calculation algorithms and allowing users to easily benchmark their calculations by using different products for the same simulation. The SYNED description of the beamline components can be stored in {\tt json} files than can be accesible locally (from disk) or remotely (web server). In Figure~\ref{figXoppy} a simple application of SYNED undulator source is used to send the same data to different widgets of XOPPY that calculate different aspects of the source radiation. 
 
 \begin{figure}[hh]
 \includegraphics[width=7cm]{FIGURES/xoppy}
@@ -108,234 +111,31 @@ Other add-ons incorporate additional functionality for OASYS. In particular for 
 
 \subsection{Optics for incoherent optics. Ray-tracing and its environment.}
 
-The ray-tracing technique has been for decades the choice for simulating synchrotron beamlines. Most of the effects that are limiting the performances of X-ray optical elements like source emittance, aberrations, errors in the optical surfaces, etc. can be efficiently modelled by ray tracing. Some particularities of the X-ray optics as compared with visible optics makes impossible that standard commercial optics tools not adequate to synchrotron radiation simulations because, for example, they lack of  a database for refraction indices in the X-ray domain, cannot handle very grazing incident optics and lack of models for perfect crystal diffraction. The code {\\tt shadow3} REFERENCE is available in OASYS and via the {\tt ShadowOUI} add-on. This new interface for shadow3 makes a quantum gap in user-friendliness from the old interface in XOP making it more intuitive and incorporating also widgets that permit to define in a very easy way compound optical systems, like CRLs or transfocators. Moreover, ShadowOUI also contains two major new contributions that are introduced here: the Hybrid model and DABAM.
+The ray-tracing technique has been for decades the choice for simulating synchrotron beamlines. Most of the effects that are limiting the performances of X-ray optical elements like source emittance, aberrations, errors in the optical surfaces, etc. can be efficiently modelled by ray tracing. Some particularities of the X-ray optics as compared with visible optics makes impossible that standard commercial optics tools not adequate to synchrotron radiation simulations because, for example, they lack of  a database for refraction indices in the X-ray domain, cannot handle very grazing incident optics and lack of models for perfect crystal diffraction. The code {\tt shadow3} REFERENCE is available in OASYS and via the {\tt ShadowOUI} add-on. This new interface for shadow3 makes a quantum gap in user-friendliness from the old interface in XOP making it more intuitive and incorporating also widgets that permit to define in a very easy way compound optical systems, like CRLs or transfocators. Moreover, ShadowOUI also contains two major new contributions that are introduced here: the Hybrid model and DABAM.
 
 The hybrid method REFERENCE combines ray-tracing and wavefront propagation. One major application of the hybrid method is its ability to assess the effects of figure errors on the performance of focusing mirrors. The hybrid method provides accurate and quick evaluation of the expected mirror performance making it a useful tool for designing diffraction-limited focusing beamlines.
 
-An open-source DAtaBAse for Metrology (DABAM) containing measured profiles of a large collection of X-ray mirrors has been created and interfaced in OASYS. It makes available metrology data (mirror heights and slopes profiles) that can be used with simulation tools for calculating the effects of optical surface errors in the performances of a synchrotron beamline. A typical case is the degradation of the intensity profile at the focal position in a beamline due to mirror surface errors. This database  aims to provide to the users of simulation tools the data of real mirrors.
-
-
-
+An open-source DAtaBAse for Metrology (DABAM) containing measured profiles of a large collection of X-ray mirrors has been created and interfaced in OASYS. It makes available experimental metrology data (mirror heights and slopes profiles) that can be used with simulation tools for realistic simulations of the effects of optical surface errors in the performances of a synchrotron beamline.
 
 
 \subsection{Optics for coherent optics. Wavefront propagation.}
 
-\subsection{Towards simulations for partial coherence optics}
+In the last years we have witnessed a rapid increase of applications of synchrotron radiation that exploit the beam coherence. Coherence-based techniques such as coherent diffraction imaging (CDI), correlation spectroscopy or more recently ptychography are coping more and more the beamtime  made available at the synchrotron facilities. The availability of a good quality coherent (ideally) or partially-coherent beam is crucial for the success of these experiments. Moreover, working with coherent beams makes more strict the quality exigences of the optical elements: many diffraction inhomogeneities and tripes may appear in the beam structure due to imperfections in the polishing, surface errors, and the use of small numerical aperture optics. It is therefore essential to make available adequate tools for calculating with high accuracy and efficiency the coherence properties of the radiation. 
+ 
+Wave optics methods are computationally more expensive, as usually one has to finely grid the phase space. Hybrid methods permitting to switch from one description to another and vice versa would be ideal. OASYS makes possible the co-existence of software tools that allow treating the same system from two points of view.
 
-\section{OASYS availability, customization, extensibility}
+The multiple tools dedicated to wave optics and wavefront propagation in OASYS use an integration framework library called WOFRY (Wave Optics FRamework in pYthon). WOFRY has a threefold functionality: i) it provides a generalization (or abstraction) of a software tool for wave optics, combining the component definitions from SYNED with the abstract declaration of wavefronts and propagators, ii) defines a mechanism for interfacing a wave optics code (e.g., SRW, WISE, etc.) in it, a first step for becoming interfaced in OASYS, and iii) provides basic implementations of simple wavefronts (e.g., plane waves, spherical waves, Gaussian sources) and propagators for prototyping optical systems.
 
-
-%===============================
-
-% Python has been chosen as main programming language, because of its universality and popularity in scientific computing. The software Orange, developed at the University of Ljubljana, has been chosen as high level workflow engine that provides the interaction with the user and communication mechanisms.
-% , retrieving the parameters of the electron beam, calculating the radiation from magnetic structure, then transporting and optimizing the photon beam and eventually including models for interaction with materials to get instrumental functions, study analyzers and detectors and perform ab-initio simulations to support experimental data analysis. 
-% 
-% Electron Beam, Photon Source, Beamline, Sample interaction, Data modeling and analyses. 
-% 
-% Most X-ray techniques are based on a signal determined by the convolution of physical effects introduced by the sample with the characteristics of the photon beam mainly due to the source and beamline optics. The latter is the so-called Instrumental Profile Function (Cheary et al., 2004￼; Zuev, 2006￼).
-% 
-% The ray-tracing approach can be used to ab�
-% 
-% A special widget representing XRPD samples (see Fig. 7￼) in a capillary holder simulates the diffracted photon beam created by the interaction of the photon beam generated by SHADOW with a capillary filled by a crystalline material. The simulation takes into account not only the diffraction law but also the absorption of the photons by the sample material and the sample holder (that can be a source of considerable aberrations). Then, diffracted rays are traced onto the detector and other possible optical elements. The widget computes Caglioti's parameters fitting a pseudo-Voigt at every simulated diffraction peak.
-
-%These programs can be divided in two groups, those based on the propagation of rays along well defined optical paths,
-%and those that propagate waves. The first ones are based on geometrical optics whereas the second
-%ones rely on physical or wave optics. 
-%\begin{figure}[h]
-%\includegraphics[width=14cm]{FIGURES/chain.png}
-%\caption{Effect of grazing angle (20, 25, 30 and 40 mrad, from top row to botom row) for systems using paraboloid mirrors. The source horizontal divergence is $\Upsilon_h$=10 mrad}
-%\label{figGrazing}
-%\end{figure}
+For X-ray Optics, OASYS integrates different simulation strategies via the implementation of adequate simulation tools: ray tracing for incoherent optics and and wave optics for fully coherent optics. However, synchrotron radiation is neither incoherent nor coherent, but partially coherent, with a coherent fraction that, for ultimate storage rings, ranges from almost 100\% at low photon energies to a few percent or even less than 1\% for photon energies of tens of keV REFERENCE. Therefore, if one wants to fully describe the coherence properties of the synchrotron beams one can extend the tools to include partial coherence. A first approximated method is the hybrid method mentioned before, that corrects the (incoherent optics) ray tracing results with some coherence effects. This is a method very simple to use in OASYS that can hep in evaluating the impact of coherence in a beamline and assessing on the necessity of using more sophisticated and computationally-expensive partial coherence calculations.  At present, partial coherence calculations are done using two methodologies: i) Monte Carlo sampling of wavefronts from an ensemble of individual electron sampled from the accelerator emittance and functions, and ii) Compute a finite number of well defined wavefronts (coherent modes) that describe in a complete way the statistical properties of the photon beam. The Monte-Carlo has been proposed and it is used in connection with SRW REFERENCE and the second one is implemented in the code COMSYL. Both methodologies will be available in OASYS in a near future.  
 
 
-% OASYS is written in Python 3.4 and relies on PyQt 5.8.2 [3] for the GUI appearance. Complementing the Orange workflow infrastructure, OASYS graphs and plots are based on the library silx [4]. X-ray-matter interaction cross sections and scattering functions are obtained from xraylib [5], used for most optical calculations.
-% 
-% The JSON integration as exchange format.
-% 
-% Remote access (SYNED-JSON, DABAM, X-RAY-SERVER)
-% 
-% PHYSICS: xraylib, scipy [codata] 
-% 
-% GRAPHICS: silx
+\section{OASYS availability, customisation, extensibility}
 
-%================================
+OASYS is a collaborative freely available and open source project. The code and relative material are available from {\tt https://github.com/oasys-kit}.    OASYS and the available add-ons are continuously developed since 2013.
 
-In the initial phase of OASYS development, we first focused our attention on importing python-based APIs into its environment, but recently we dedicated our efforts on its final goal: to define a uniform and exchangeable description of the real world set up that is tailored to the synchrotron world and is still flexible enough to allow particularities for different algorithms and physical approaches. This is implemented by creating an object-oriented framework library, providing the glossary for the definition of light sources and optical components, together with a set of dedicated (so-called) widgets, the active elements of the OASYS graphical user interface (GUI) [11]. This common layer upon OASYS APIs has been called SYNED (SYNchrotron Elements Dictionary), and it is the base for allowing user to create workspaces with several APIs simulating the same beamline without data misalignment or redundancy, thus separating the description of the real world from details of the calculation algorithms and allowing users to easily benchmark their calculations by using different products for the same simulation.
+OASYS provides an interesting platform for developing simulation and data-analysis projects. The infrastructure put in place allows a user with some programming abilities to create his/her own add-ons and integrate them in the OASYS installation. Moreover, users are already creating new add-ons at that extend the functionality current applications (e.g., ShadowOui) with some particular tools. 
 
-After implementing these common definitions and data structures, we work on the creation of a software platform able to combine different APIs, by exchanging data and calculation results. The final purpose is to optimize running different calculations and making comparisons of the results. The first integration framework library we developed is dedicated to wave optics and it is called WOFRY (Wave Optics FRamework in pYthon), a generalization (or abstraction) of a wavefront propagation software tool, combined with the SYNED definition of a synchrotron radiation beamline.
-
-
-
-Existing OASYS API like ShadowOui [11] and the wavefront propagation tool WISE [12] and XOPPY (XOP [13] in PYthon) has been refactored to be compatible with SYNED. The SRW OASYS prototype API has been implemented according to both WOFRY and SYNED frameworks. UML [14] class diagrams, implementation details and examples of both framework are shown in the following paragraphs.
-
-The ultimate purpose of OASYS is to integrate in a synergetic way the most powerful calculation engines available to perform virtual experiments in a synchrotron beamline, from the electron emission to the sample scattering. For X-ray Optics, OASYS integrates different simulation strategies via the implementation of adequate simulation tools (e.g. ray tracing and wave optics packages). It provides a language to make them to communicate by sending and receiving encapsulated data.
-
-OASYS is a modern and user-friendly graphical environment for modelling X-ray experiments, where several top-level optical simulation tools have already been successfully integrated. We showed by examples how the OASYS environment allows the users to perform complex calculations in an intuitive and easy way, increasing the level of affordability of the optical design. OASYS and the available APIs (Add-Ons) is continuously developed since 2013 and upgraded both in term of number of functionalities and in robustness.
-
-
-Wave optics methods are
-computationally more expensive, as usually one has to finely grid the phase space. Hybrid methods
-permitting to switch from one description to another and vice versa would be ideal. The present trend
-[1] is the co-existence of software tools that allow treating the same system from two points of view.
-The integration of these two approaches into a single computer environment is a challenge that will
-certainly be developed in the near future. This paper describes the recent developments in ray tracing,
-mainly in connection with the SHADOW [2] code. At the end of the paper, some ideas of integration
-of ray tracing and wave optics are discussed, and some collaborative effort is on progress. 
-
-
-
-% \section{FIRST-ORDER HEADING}
-% This is an example of dummy text. This is an example of dummy text. This is an example of dummy text.
-% This is an example of dummy text. This is an example of dummy text. This is an example of dummy text.
-% 
-% This is the paragraph spacing that occurs when you use the [ENTER] key.
-% 
-% % Head 2
-% \subsection{Second-Order Heading}
-% This is an example of dummy text. This is an example of dummy text. This is an example of dummy text.
-% This is an example of dummy text. This is an example of dummy text. This is an example of dummy text.
-% This is an example of dummy text. This is an example of dummy text. This is an example of dummy text.
-% This is an example of dummy text. This is an example of dummy text. This is an example of dummy text.
-% 
-% 
-% % Head 3
-% \subsubsection{Third-Order Heading}
-% Physical data should be quoted with decimal points and negative exponents (e.g., 25.8 J K$^{-1}$ mol$^{-1}$), and arranged as follows where possible: mp/bp 20$^{\circ}$C; [$\alpha$]D20 $=$ $-$13.5 ($c = 0.2$, acetone) (please also give units for [$\alpha$] and $c$, usually deg cm$^3$ g$^{-1}$ dm$^{-1}$ and g cm$^{-3}$, respectively); 1H NMR (400 MHz, DMSO-$d_6$, $\delta$): 7.15 (s, 2H, Ar H), 1.3 (q, $J = 8$ Hz, 2H; CH$_2$), 0.9 (t, $J = 8$ Hz, 3H; CH$_3$); $^{13}$C NMR (100 MHz, CDCl$_3$, δ): 175.4 (C$=$O), 156.5 (C4); IR (KBr): $\nu = 2972$ (w), 2907 (w), \ldots, 1026 (s; $\nu_{\rm as}$(SiOSi)), 971 ($\nu_{\rm s}$), $\ldots$, 666 (w; $\nu_{\rm s}$(SiOSi)), \ldots, 439 (m), 401 cm$^{-1}$ (m); UV-vis ($n$-hexane): $\lambda_{\max}$ ($\varepsilon$) $=$ 320 (5000), 270 nm (12000); EIMS $m/z$ (\%): 108 (20) [M$^+$], 107 (60) [M$^+$ $-$ H], 91 (100) [C$_7$H$_7^+$]; HRMS (ESI) $m/z$: [M $+$ H]$^+$ calcd for C$_{21}$H$_{38}$N$_{4}$O$_{6}$S, 475.2591; found, 475.2593. Anal. calcd for C$_{45}$H$_{28}$N$_{4}$O$_{7}$: C 62.47, H 3.41, N 6.78; found: C 62.27, H 3.46, N 6.80.
-% 
-% % enumerate
-% \noindent Numbered lists may also be included and should look like this:
-% 
-% \begin{enumerate}
-% \item This is an example of numbered listing.
-% \item This is an example of numbered listing. This is an example of numbered listing.
-% \item This is an example of numbered listing.
-% \item This is an example of numbered listing. This is an example of numbered listing.
-% \item This is an example of numbered listing.
-% \item This is an example of numbered listing. This is an example of numbered listing.
-% \end{enumerate}
-% 
-% \noindent Bulleted lists may be included and should look like this:
-% % itemize
-% 
-% \begin{itemize}
-% \item This is an example of bulleted listing.
-% \item This is an example of bulleted listing. This is an example of bulleted listing.
-% \item This is an example of bulleted listing.
-% \item This is an example of bulleted listing. This is an example of bulleted listing.
-% \item This is an example of bulleted listing.
-% \end{itemize}
-% 
-% \noindent This is an example of single line numbered equation.
-% \begin{equation}
-% \frac{d[F_1]}{d\omega_2} = SAm_2\cos\omega,\frac{d[F_1]}{d\omega_3}= SAm_2\cos\omega.
-% \end{equation}
-% 
-% This is an example of a multiline numbered equation.
-% % Numbered multiple equation
-% \begin{eqnarray}
-% p_{t_{10,1}}&=&\left(\frac{N_{cu}^2}{ N_c ^2}\right)\left(\frac{N_{ar}^2}{N_a^2}\right)\left(\frac{N_{ar}-1}{N_{ar}}\right),\\
-% p_{t_{10,2}}&=&\left(\frac{N_{cu}^2}{ N_c ^2}\right)\left(\frac{N_{ar}}{N_a^2}\right).
-% \end{eqnarray}
-% 
-% % Unnumbered equation
-% %% \begin{eqnarray*}
-% %% {\rm ((Multi\ Equation\ Unnumbered))}\\
-% %% {\rm ((Multi\ Equation\ Unnumbered))}\\
-% %% {\rm ((Multi\ Equation\ Unnumbered))}
-% %% \end{eqnarray*}
-% %% this is an example of dummy text.
-% % Unnumbered equation
-% %% \[
-% %% {\rm ((Single\ Equation\ Unnumbered))}
-% %% \]
-% %% this is an example of dummy text.
-% For more on equations, please refer to the guide.
-% 
-% \section{OTHER SPECIFICATIONS (FIRST LEVEL HEADING)}
-% Figures, tables, and equations must be inserted in the text and may not be grouped at the end of the paper. Important: A miscount of figures, tables, or equations may result from revisions. Please double check the numbering of these elements before you submit your paper to your proceedings editor.
-% 
-% \subsection{Figures (Second Level Heading)}
-% If you need to arrange a number of figures, a good tip is to place them in a table, which gives you additional control of the layout. Leave a line space between your figure and any text above it, like this one:
-% 
-% % Figure
-% \begin{figure}[h]
-%   \centerline{\includegraphics[width=150pt]{FIGURES-TMP/fig_1}}
-%   \caption{To format a figure caption use the \LaTeX template style: Figure Caption. The text ``FIGURE 1,'' which labels the caption, should be bold and in upper case. If figures have more than one part, each part should be labeled (a), (b), etc. Using a table, as in the above example, helps you control the layout.}
-% \end{figure}
-% 
-% \begin{sidewaysfigure}
-%   \centerline{\includegraphics[width=500pt]{FIGURES-TMP/fig_2}}
-%   \caption{To format a figure caption use the \LaTeX template style: Figure Caption. The text ``FIGURE 2,'' which labels the caption, should be bold and in upper case. If figures have more than one part, each part should be labeled (a), (b), etc. Using a table, as in the above example, helps you control the layout.}
-% \end{sidewaysfigure}
-% 
-% Cite all figures in the text consecutively. The word ``Figure'' should be spelled out if it is the first word of the sentence and abbreviated as ``Fig.'' elsewhere in the text. Place the figures as close as possible to their first mention in the text at the top or bottom of the page with the figure caption positioned below the figure, all centered. Figures must be inserted in the text and may not follow the Reference section. Set figure captions in 9 point size, Times Roman font. Type the word ``FIGURE 1.'' in bold uppercase, followed by a period.\footnote{This is an example of a footnote.}
-% 
-% 
-% Authors are welcome to use color figures within their article. For online publication, there are no costs added for color figures. However, for printed proceedings (if requested by your conference organizer), there is an additional cost. Please consult directly with your conference organizer. If your conference organizer has asked AIP Publishing to produce printed copies (many ask AIP Publishing for online-only publication), then all figures will be printed in black-and-white unless you make specific arrangements with your organizer(s) to include color figures in your article and pay to them the associated fee(s) they request. We advise that many color figures can be printed in black-and-white with no loss of information; however, some figures do lose information when reproduced in black-and-white. Check your figure legends carefully and, if your figures are to be printed in black-and-white, remove from your text/descriptions any references to color.
-% 
-% 
-% \subsection{Tables (Second Level Heading)}
-% Due to the wide range and complexity of tables, we simply offer an example for guidance. Please follow the style for Table \ref{tab:a} (and figure) captions.
-% 
-% % Table
-% \begin{table}[h]
-% \caption{To format a table caption, use the \LaTeX template style: Table Caption. The text ``{\bf TABLE 1,}'' which labels the caption, should be bold and all letters capitalized. Center this text above the table. Tables should have top and bottom rules, and a rule separating the column heads from the rest of the table only.}
-% \label{tab:a}
-% \tabcolsep7pt\begin{tabular}{lcccc}
-% \hline
-%   & \tch{1}{c}{b}{Single\\ outlet}  & \tch{1}{c}{b}{Small\\ multiple\tabnoteref{t1n1}}  & \tch{1}{c}{b}{Large\\ multiple}  & \tch{1}{c}{b}{Total}   \\
-% \hline
-% 1982 & 98 & 129 & 620    & 847\\
-% 1987 & 138 & 176 & 1000  & 1314\\
-% 1991 & 173 & 248 & 1230  & 1651\\
-% 1998 & 200 & 300 & 1500\tabnoteref{t1n2}  & 2000\\
-% \hline
-% \end{tabular}
-% \tablenote[t1n1]{This is an example of first tablenote entry. This is an example of first tablenote entry.}
-% \tablenote[t1n2]{This is an example of second tablenote entry.}
-% \end{table}
-% 
-% \subsection{Font Embedding (Second Level Heading)}
-% As the author and creator of your article PDF, you have the most intimate knowledge of exactly what the PDF should display. We ask all authors to carefully check their article PDF prior to submission. Perform visual inspections to detect subtle font errors and ensure that all fonts are embedded. With the wide range of tools and software that authors use to create PDFs, and the number of devices and platforms that readers use to view/print them, font embedding by authors is not only ``nice-to-have'', it is essential. 
-% 
-% \subsubsection{Why Should I Care About Font Embedding? (Third Level Heading)}
-% Embedding fonts into your PDF file is critically important for two reasons:
-% \begin{itemize}
-% \item Commercial printing companies are unable to print PDFs without the correct fonts embedded.
-% \item To ensure that your online article PDF file displays and prints correctly for everyone who wants to read your work.
-% \end{itemize}
-% 
-% Readers of scientific articles use an ever-increasing range of devices and applications to access, view, and print PDFs  from smart phones and tablets to desktop computers running any one of a number of operating systems. To ensure that readers of  your article can display and print it correctly, it is important for your article's PDF file to be truly portable. Your PDF file needs to be fully ``self-contained.''%\vfill\pagebreak
-% 
-% \section{FINAL KEY POINTS TO CONSIDER (FIRST LEVEL HEADING)}
-% Here are the main points you need to follow (the AIP Publishing author template packages contain comprehensive guidance):
-% 
-% \begin{itemize}
-% \item Write and prepare your article using the AIP Publishing template.
-% \item Create a PDF file of your paper (making sure to embed all fonts).
-% \item Send the following items to your conference organizer:
-% \begin{itemize}
-% \item PDF file of your paper
-% \item Signed Copyright Transfer Agreement
-% \item (If it applies) Copies of any permissions to re-use copyrighted materials in your article (e.g., figures from books/journals)
-% \end{itemize}
-% \end{itemize}
-% 
-% 
-% 
-% % Sections that will go in second font
-% 
-% % Acknowledgement
-% \section{ACKNOWLEDGMENTS}
-% The reference section will follow the ``Acknowledgment'' section.  References should be numbered using Arabic numerals followed by a period (.) as shown below, and should follow the format in the below examples.
-% 
-% % References
-% 
-% % [1] Rebuffi, L and Sanchez del Rio, M. "OASYS (OrAnge SYnchrotron Suite): an open-source graphical environment for x-ray virtual experiments”, Proc. SPIE 10388, 103880S (2017)
-% % [2] Rebuffi, L and Sanchez del Rio, M. "ShadowOui: A new visual environment for X-ray optics and synchrotron beamline simulations”, J. Synchrotron Rad. 23 (2016)
-% % [3] Chubar, O., Elleaume, P. “Accurate and Efficient Computation of Synchrotron Radiation In The Near Field Region,” Proceedings of the EPAC98 Conference, 22–26 June 1998, 1177–1179 (1998).
-% % [4] Demšar, J., Curk, T. and Erjavec, A. “Orange: Data Mining Toolbox in Python,” Journal of Machine Learning Research 14, 2349–2353 (2013). 
-
+At present, the strong point of OASYS is the ability to fully simulate the beamline sources and optics with a complete and variated simulation tools. In the future it will be extended to interactions radiation-samples. An example of this application is an application that simulates the diffracted photon beam created by the interaction of the photon beam generated by shadow3 with a capillary filled by a crystalline material. The simulation takes into account not only the diffraction properties but also the absorption of the photons by the sample material and the sample holder which can be a source of aberrations. The application determine the instrument function of a powder diffraction beamline via an ab-initio  computtion of the Caglioti's parameters.
 
 %\nocite{*}
 \bibliography{references}%
